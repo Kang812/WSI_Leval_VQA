@@ -1,10 +1,8 @@
 import argparse
 import os
-<<<<<<< HEAD
 import sys
 sys.path.append("/workspace/whole_slide_image_LLM/wsi_level_vqa-main/")
-=======
->>>>>>> origin/main
+
 from utils.get_patchs import convert_png_to_deepzoom
 from tqdm import tqdm
 from glob import glob

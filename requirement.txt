@@ -8,9 +8,6 @@ pandas==2.2.3
 matplotlib
 xformers==0.0.28
 pyvips==2.2.3
-<<<<<<< HEAD
 albumentations==1.4.21
 scikit-learn
-=======
-albumentations==1.4.21
->>>>>>> origin/main
+faiss-gpu==1.7.2
