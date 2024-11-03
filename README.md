@@ -1,6 +1,5 @@
 
 # WSI_Leval_VQA
-# wsi_level_vqa
 
 ## Environment
 
