@@ -10,7 +10,7 @@ class WSIClassifier(nn.Module):
         self.D = 32
         self.K = 1
         
-        resnet = models.resnet18(pretrained=True)
+        resnet = models.resnet18(pretrained=False)
         
         # Since patches in each batch belong to a WSI, switching off batch statistics tracking
         # Or reinitializing batch parameters and changing momentum for quick domain adoption
