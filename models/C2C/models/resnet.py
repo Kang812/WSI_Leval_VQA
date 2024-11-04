@@ -43,6 +43,7 @@ class WSIClassifier(nn.Module):
 
     def forward(self, x):
         x = x.view(-1, x.shape[-3], x.shape[-2], x.shape[-1])
+        x = x.float()
         x = self.resnet_head(x)
         x = x.view(x.size(0), -1)
         x = self.resnet_tail(x)        
@@ -63,6 +64,7 @@ class Enc(nn.Module):
         self.resnet_tail = model_base.resnet_tail
         
     def forward(self, x):
+        x = x.float()  
         x = self.resnet_head(x)
         x = x.view(x.size(0), -1)
         x = self.resnet_tail(x)
@@ -77,6 +79,7 @@ class PatchClassifier(nn.Module):
         self.patch_classifier = model_base.patch_classifier
         
     def forward(self, x):
+        x = x.float()
         x = self.resnet_head(x)
         x = x.view(x.size(0), -1)
         x = self.resnet_tail(x)
@@ -93,6 +96,7 @@ class EncAttn(nn.Module):
         self.attention = model_base.attention
         
     def forward(self, x):
+        x = x.float()
         x = self.resnet_head(x)
         x = x.view(x.size(0), -1)
         x = self.resnet_tail(x)

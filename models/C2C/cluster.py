@@ -5,11 +5,11 @@ from tqdm import tqdm
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import normalize
 from torch.utils.data import Dataset, DataLoader
+import sys
+sys.path.append("/workspace/whole_slide_image_LLM/wsi_level_vqa-main/models/")
 
 from C2C.models.resnet import PatchClassifier, Enc
 from C2C.dataloader import *
-
-
 
 def get_representation(dl, enc):
     """

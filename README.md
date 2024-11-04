@@ -20,6 +20,12 @@ pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.
 ./wsi_create_patch.sh
 ```
 
+## MIL Model Train
+
+```
+python MIL_train.py --device cuda --num_classes 2 --num_epochs 30 --df_path /workspace/whole_slide_image_LLM/data/patches_train.csv --lr 1e-4 --fpath /workspace/whole_slide_image_LLM/wsi_level_vqa-main/model_save/MIL/checkpoint.pt
+```
+
 
 ## Reference
 - [WSI-VQA: Interpreting Whole Slide Images by Generative Visual Question Answering](https://arxiv.org/abs/2407.05603)

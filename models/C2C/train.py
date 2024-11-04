@@ -5,8 +5,9 @@ import numpy as np
 import torch.nn as nn
 import torch.nn.functional as F
 import albumentations
-from albumentations.pytorch import ToTensorV2, ToTensor
-
+from albumentations.pytorch import ToTensorV2
+import sys
+sys.path.append("/workspace/whole_slide_image_LLM/wsi_level_vqa-main/models/")
 from C2C.dataloader import *
 from C2C.eval_model import *
 from C2C.utils import *
