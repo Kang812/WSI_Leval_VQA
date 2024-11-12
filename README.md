@@ -23,13 +23,14 @@ pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.
 ## MIL Model Train
 
 ```
-python MIL_train.py --device cuda --num_classes 2 --num_epochs 30 --df_path /workspace/whole_slide_image_LLM/data/patches_train.csv --lr 1e-4 --fpath /workspace/whole_slide_image_LLM/wsi_level_vqa-main/model_save/MIL/checkpoint.pt
+python MIL_train.py --device cuda --num_classes 2 --num_epochs 30 --df_path /workspace/whole_slide_image_LLM/data/patches_train.csv --lr 1e-4 --num_cluster 8 --num_img_per_cluster 8 --fpath /workspace/whole_slide_image_LLM/wsi_level_vqa-main/model_save/MIL/checkpoint.pt --bn_track_running_stats
 ```
 - device : cuda or cpu
 - num_classes : Number of classes
 - num_epochs : Number of training epochs
 - df_path : Training dataset
-- lr : Learning rate 
+- lr : Learning rate
+- num_img_per_cluster : bag size
 - fpath : Model save path 
 
 ## Reference

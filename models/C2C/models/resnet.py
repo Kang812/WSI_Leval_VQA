@@ -10,22 +10,22 @@ class WSIClassifier(nn.Module):
         self.D = 32
         self.K = 1
         
-        resnet = models.resnet18(pretrained=False)
+        resnet = models.resnet18(pretrained=True)
         
         # Since patches in each batch belong to a WSI, switching off batch statistics tracking
         # Or reinitializing batch parameters and changing momentum for quick domain adoption
-        if bn_track_running_stats:
-            for modules in resnet.modules():
-                if isinstance(modules, nn.BatchNorm2d):                
-                    modules.track_running_stats = False
-        else:
-            for modules in resnet.modules():
-                if isinstance(modules, nn.BatchNorm2d):                                
-                    modules.momentum = 0.9
-                    modules.weight = nn.Parameter(torch.ones(modules.weight.shape))
-                    modules.running_mean = torch.zeros(modules.weight.shape)
-                    modules.bias = nn.Parameter(torch.zeros(modules.weight.shape))
-                    modules.running_var = torch.ones(modules.weight.shape)                  
+        #if bn_track_running_stats:
+        #    for modules in resnet.modules():
+        #        if isinstance(modules, nn.BatchNorm2d):                
+        #            modules.track_running_stats = False
+        #else:
+        #    for modules in resnet.modules():
+        #        if isinstance(modules, nn.BatchNorm2d):                                
+        #            modules.momentum = 0.9
+        #            modules.weight = nn.Parameter(torch.ones(modules.weight.shape))
+        #            modules.running_mean = torch.zeros(modules.weight.shape)
+        #            modules.bias = nn.Parameter(torch.zeros(modules.weight.shape))
+        #            modules.running_var = torch.ones(modules.weight.shape)                  
             
         modules = list(resnet.children())[:-1]          
         self.resnet_head = nn.Sequential(*modules)

@@ -78,7 +78,7 @@ def reinitialize_dataloader(train_images, train_images_cluster, train_images_lab
                                     transform=data_transforms)
 
     batch_size = 1
-    num_workers = 0
+    num_workers = 4
 
     dataloaders = {'train': torch.utils.data.DataLoader(train_data, batch_size=batch_size,
                                                  shuffle=True, num_workers=num_workers),

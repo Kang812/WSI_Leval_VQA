@@ -66,6 +66,7 @@ def train_model(model, criterion_dic, optimizer, df, data_transforms, alpha=1., 
                 model.train()  # Set model to training mode
             else:
                 model.eval()   # Set model to evaluate mode
+                #model.train()
                 epoch_acc = eval_model(valid_images, valid_images_label, model, data_transforms=data_transforms)
                 
                 if epoch_acc >= best_acc:

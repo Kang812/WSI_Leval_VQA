@@ -24,7 +24,7 @@ def main(args):
     df = pd.read_csv(args.df_path)
 
     # Initialize Model
-    model_ft = WSIClassifier(args.num_classes, bn_track_running_stats=True)
+    model_ft = WSIClassifier(args.num_classes, bn_track_running_stats=args.bn_track_running_stats)
     model_ft = model_ft.to(device)
     
     data_transforms = A.Compose([
@@ -47,7 +47,9 @@ def main(args):
                                  alpha=1, 
                                  beta=0.01,
                                  gamma=0.01,
-                                 num_epochs=args.num_epochs, 
+                                 num_cluster = args.num_cluster,
+                                 num_img_per_cluster = args.num_img_per_cluster,
+                                 num_epochs=args.num_epochs,
                                  fpath=args.fpath,
                                  topk=True)
 
@@ -58,7 +60,10 @@ if __name__ == '__main__':
     parser.add_argument('--num_epochs', type = int, default=30)
     parser.add_argument('--df_path', type = str, default="/workspace/whole_slide_image_LLM/data/patches_train.csv")
     parser.add_argument('--lr', type = float, default=1e-4)
+    parser.add_argument('--num_cluster', type = int, default=8)
+    parser.add_argument('--num_img_per_cluster', type = int, default=8)
     parser.add_argument('--fpath', type = str, default="/workspace/whole_slide_image_LLM/wsi_level_vqa-main/model_save/MIL/checkpoint.pt")
+    parser.add_argument('--bn_track_running_stats', action="store_true")
 
     args = parser.parse_args()
     main(args)
