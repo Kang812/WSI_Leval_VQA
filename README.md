@@ -12,12 +12,17 @@ sudo apt-get install -y libvips-dev
 pip install -r requirement.txt
 pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.git"
 ```
+## Image Preprocessing
+- Due to significant contamination in the images, I removed the contamination and eliminated duplicate tissues. I created tissue masks to isolate only the tissue regions and applied a rule-based approach to remove duplicate tissues.
+
+![image1](./img/image_preprocessing.png)
 
 ## Data Generate
 - Generate data for training MIL models
   - Create patch data from whole slide image data in png format
 ```
 ./wsi_create_patch.sh
+
 ```
 
 ## MIL Model Train
