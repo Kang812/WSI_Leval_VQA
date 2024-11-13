@@ -14,6 +14,7 @@ pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.
 ```
 ## Image Preprocessing
 - Due to significant contamination in the images, I removed the contamination and eliminated duplicate tissues. I created tissue masks to isolate only the tissue regions and applied a rule-based approach to remove duplicate tissues.
+- Please refer to the image_preprocessing.py file and ./utils/wsi_core for the related code.
 
 ![image1](./img/image_preprocessing.png)
 
