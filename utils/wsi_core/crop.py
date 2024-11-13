@@ -23,17 +23,37 @@ def crop_image(image):
         a.append(image.shape[1])
 
     indes = []
-    
     for i in range(len(a) - 1):
         if a[i + 1] - a[i] > 500:
             indes.append(i)
     
+    if indes == []:
+        for i in range(len(a) - 1):
+            if a[i + 1] - a[i] > 300:
+                indes.append(i)
+
+    if indes == []:
+        for i in range(len(a) - 1):
+            if a[i + 1] - a[i] > 100:
+                indes.append(i)
     x_range = []
-    for i in range(len(indes) -1):
-        if a[indes[i+1]] - a[indes[i]+1] < 50:
-            min_v = min(a[indes[i+1]], a[indes[i+1] + 1], a[indes[i]+1], a[indes[i]])
-            max_v = max(a[indes[i+1]], a[indes[i+1] + 1], a[indes[i]+1], a[indes[i]])
-            x_range.append([min_v, max_v])
+    if len(indes) <= 3:
+        for i in range(len(indes)):
+            x_range.append([a[indes[i]], a[indes[i] + 1]])
+
+    if x_range == []:
+        for i in range(len(indes) -1):
+            if a[indes[i+1]] - a[indes[i]+1] < 50:
+                min_v = min(a[indes[i+1]], a[indes[i+1] + 1], a[indes[i]+1], a[indes[i]])
+                max_v = max(a[indes[i+1]], a[indes[i+1] + 1], a[indes[i]+1], a[indes[i]])
+                x_range.append([min_v, max_v])
+
+    if x_range == []:
+        for i in range(len(indes) -1):
+            if a[indes[i+1]] - a[indes[i]+1] < 300:
+                min_v = min(a[indes[i+1]], a[indes[i+1] + 1], a[indes[i]+1], a[indes[i]])
+                max_v = max(a[indes[i+1]], a[indes[i+1] + 1], a[indes[i]+1], a[indes[i]])
+                x_range.append([min_v, max_v])
 
     if x_range == []:
         for i in range(len(indes)):
@@ -42,6 +62,9 @@ def crop_image(image):
     width_range = x_range[0]
     croping_img = image[:, :width_range[1], :]
 
+    for w_pos in reversed(range(croping_img.shape[1])):
+        if (croping_img[:, w_pos] == [255, 255, 255]).all():
+            croping_img = np.delete(croping_img, w_pos, 1)
     for h_pos in reversed(range(croping_img.shape[0])):
         if (croping_img[h_pos, :] == [255, 255, 255]).all():
             croping_img = np.delete(croping_img, h_pos, 0)
