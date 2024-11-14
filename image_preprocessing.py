@@ -6,8 +6,9 @@ from utils.wsi_core.mask_gen import remove_background
 from tqdm import tqdm
 from glob import glob
 
-image_paths = glob("/workspace/whole_slide_image_LLM/data/train_imgs/*.png")
-save_dir = '/workspace/whole_slide_image_LLM/data/image/train/'
+image_paths = glob("/workspace/whole_slide_image_LLM/data/test_imgs/*.png")
+save_dir = '/workspace/whole_slide_image_LLM/data/image/test/'
+#save_dir = '/workspace/whole_slide_image_LLM/data/image/train/'
 #image_paths = image_paths[:60]
 #image_paths = ['/workspace/whole_slide_image_LLM/data/train_imgs/BC_01_0006.png']
 
