@@ -49,13 +49,15 @@ pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.
 ```
 python MIL_train.py --device cuda --num_classes 2 --num_epochs 30 --df_path /workspace/whole_slide_image_LLM/data/patches_train.csv --lr 1e-4 --num_cluster 8 --num_img_per_cluster 8 --fpath /workspace/whole_slide_image_LLM/wsi_level_vqa-main/model_save/MIL/checkpoint.pt --bn_track_running_stats
 ```
-- device : cuda or cpu
-- num_classes : Number of classes
-- num_epochs : Number of training epochs
-- df_path : Training dataset
-- lr : Learning rate
-- num_img_per_cluster : bag size
-- fpath : Model save path 
+- This model is trained to extract only the patches that are crucial for classifying whole slide images during patch extraction
+- Hyper parameter
+  - device : cuda or cpu
+  - num_classes : Number of classes
+  - num_epochs : Number of training epochs
+  - df_path : Training dataset
+  - lr : Learning rate
+  - num_img_per_cluster : bag size
+  - fpath : Model save path 
 
 ## Reference
 - [WSI-VQA: Interpreting Whole Slide Images by Generative Visual Question Answering](https://arxiv.org/abs/2407.05603)
