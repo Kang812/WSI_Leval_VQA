@@ -18,6 +18,7 @@ pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.
 
 ![image1](./img/image_preprocessing.png)
 
+
 ## Data Generate
 - Generate data for training MIL models
   - Create patch data from whole slide image data in png format
@@ -25,6 +26,23 @@ pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.
 ./wsi_create_patch.sh
 
 ```
+
+## Image classification model Train
+
+```
+./classifier_train.sh
+
+```
+- model_name : timm model name  
+- num_classes : Number of predicted classes
+- train_dataframe_path : train dataframe path 
+- valid_dataframe_path : valie dataframe path  
+- epochs : Number of training epochs
+- train_batch_size : train batch size
+- valid_batch_size : valid batch size
+- device : cuda or cpu
+- output_path : Training model save location
+
 
 ## MIL Model Train
 

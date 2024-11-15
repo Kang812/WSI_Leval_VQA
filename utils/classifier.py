@@ -28,15 +28,11 @@ class Whole_Slide_DataSet(Dataset):
         return len(self.image_paths)
     
     def __getitem__(self, index):
-        #img = cv2.imread(self.image_paths[index])
-        img = Image.open(self.image_paths[index])
-        
-        label = self.labels[index]
-        
-        en_label = self.label_seq[label]
-                
+        img = cv2.imread(self.image_paths[index])
+        en_label = self.labels[index]
+
         if self.transform:
-            img = self.transform(img)
+            img = self.transform(image = img)['image']
         
         return img, en_label
     
@@ -140,8 +136,8 @@ def train_classifer(model, dataloaders, dataset_sizes, epochs, criterion, optimi
 
 
 def trainer(model, train_dataframe_path, valid_dataframe_path,
-            train_batch_size , valid_batch_size, num_classes,
-            device):
+            epochs, train_batch_size , valid_batch_size, num_classes,
+            output_path, device):
     
     train_transforms = A.Compose([
         A.LongestMaxSize(518, interpolation=cv2.INTER_NEAREST),
@@ -174,14 +170,12 @@ def trainer(model, train_dataframe_path, valid_dataframe_path,
                                            batch_size = valid_batch_size, shuffle = False, label_seq = label_seq)
     
     data_loaders['train'] = train_dataloader
-    data_loaders['valid'] = val_dataloader
+    data_loaders['val'] = val_dataloader
 
     ## model training
-    epochs = 15
+    epochs = epochs
     criterion = torch.nn.CrossEntropyLoss()
     optimizer = torch.optim.SGD(model.parameters(), lr = 0.01)
-    device = torch.device("cuda:" if torch.cuda.is_available() else 'cpu')
-    output_path = "/onetouch/project/pet_retina_develop/work_dir/best.pt"
     scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
     
     train_classifer(model, data_loaders, dataset_sizes, epochs, criterion, optimizer, scheduler, device, output_path)
