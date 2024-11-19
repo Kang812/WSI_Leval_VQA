@@ -40,6 +40,10 @@ pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.
   - device : cuda or cpu
   - output_path : Training model save location
 
+| best epoch | Acc | Recall | Precision | F1 Score | model link |
+| --- | --- | --- | --- | --- | --- | --- |
+| 13 | 0.9763 | 0.9751 | 0.9748 | 0.9750 | [link](-) |
+
 ## MIL Model Train
 
 ```
