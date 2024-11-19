@@ -18,7 +18,7 @@ pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.
 
 ![image1](./img/image_preprocessing.png)
 
-- Subsequently, paths were generated to train the classification model. The reference code can be found at ./utils/wsi_core/get_patchs.py.
+- Subsequently, patchs were generated to train the classification model. The reference code can be found at ./utils/wsi_core/get_patchs.py.
 
 ## Weakly Supervised Learning
 - Learning a classification model for weakly supervised learning
