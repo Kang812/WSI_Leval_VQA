@@ -12,22 +12,17 @@ sudo apt-get install -y libvips-dev
 pip install -r requirement.txt
 pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.git"
 ```
-## Image Preprocessing
-- Due to significant contamination in the images, I removed the contamination and eliminated duplicate tissues. I created tissue masks to isolate only the tissue regions and applied a rule-based approach to remove duplicate tissues.
+## Image Preprocessing for Weakly Supervised Learning
+- To create a bag by obtaining patches only from tumor regions, a rule-based approach is applied to select tissues located within mask regions among multiple overlapping tissues, followed by cropping.
 - Please refer to the image_preprocessing.py file and ./utils/wsi_core for the related code.
 
 ![image1](./img/image_preprocessing.png)
 
+- Subsequently, paths were generated to train the classification model. The reference code can be found at ./utils/wsi_core/get_patchs.py.
 
-## Data Generate
-- Generate data for training MIL models
-  - Create patch data from whole slide image data in png format
-```
-./wsi_create_patch.sh
-
-```
-
-## Image classification model Train
+## Weakly Supervised Learning
+- Learning a classification model for weakly supervised learning
+- The reason for choosing weakly supervised learning is that there is not enough data with masks available. Instead of using a segmentation approach, this method was chosen to detect tumor regions through weakly supervised learning.
 
 ```
 ./classifier_train.sh
@@ -45,7 +40,6 @@ pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.
   - device : cuda or cpu
   - output_path : Training model save location
 
-
 ## MIL Model Train
 
 ```
@@ -58,6 +52,14 @@ python MIL_train.py --device cuda --num_classes 2 --num_epochs 30 --df_path /wor
 - lr : Learning rate
 - num_img_per_cluster : bag size
 - fpath : Model save path 
+
+## Data Generate
+- Generate data for training MIL models
+  - Create patch data from whole slide image data in png format
+```
+./wsi_create_patch.sh
+
+```
 
 ## Reference
 - [WSI-VQA: Interpreting Whole Slide Images by Generative Visual Question Answering](https://arxiv.org/abs/2407.05603)

@@ -1,24 +1,21 @@
 import cv2
-import numpy as np
 import os
-from utils.wsi_core.crop import crop_image
-from utils.wsi_core.mask_gen import remove_background
-from tqdm import tqdm
 from glob import glob
+from utils.wsi_core.mask_gen import remove_background
+from utils.wsi_core.crop import crop_image
 
-image_paths = glob("/workspace/whole_slide_image_LLM/data/test_imgs/*.png")
-save_dir = '/workspace/whole_slide_image_LLM/data/image/test/'
-#save_dir = '/workspace/whole_slide_image_LLM/data/image/train/'
-#image_paths = image_paths[:60]
-#image_paths = ['/workspace/whole_slide_image_LLM/data/train_imgs/BC_01_0006.png']
+mask_paths = glob("/workspace/whole_slide_image_LLM/data/train_masks/*.png")
+for mask_path in mask_paths:
+    img_path = mask_path.replace("train_masks", "train_imgs")
 
-for i in tqdm(range(len(image_paths))):
-    image_path = image_paths[i]
-    file_name = image_path.split("/")[-1]
+    img = cv2.imread(img_path)
+    mask = cv2.imread(mask_path, 0)
+    mask[mask != 255] = 3
+    mask[mask == 255] = 0
+    mask[mask == 3] = 1
+    
+    img_mask = remove_background(img)
+    croping_img, crop_mask = crop_image(img, img_mask, mask)
 
-    image = cv2.imread(image_path)
-    image  = remove_background(image)
-    preprocessing_img = crop_image(image)
-
-    save_path = os.path.join(save_dir, file_name)
-    cv2.imwrite(save_path, preprocessing_img)
+    cv2.imwrite(os.path.join("/workspace/whole_slide_image_LLM/data/classification_dataset/crop_image/", img_path.split("/")[-1]), croping_img)
+    cv2.imwrite(os.path.join("/workspace/whole_slide_image_LLM/data/classification_dataset/crop_mask/", img_path.split("/")[-1]), crop_mask)

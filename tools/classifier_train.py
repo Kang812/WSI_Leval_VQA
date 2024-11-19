@@ -1,10 +1,11 @@
 import sys
-sys.path.append("/workspace/whole_slide_image_LLM/wsi_level_vqa-main/utils/")
-sys.path.append("/workspace/whole_slide_image_LLM/wsi_level_vqa-main/models")
-from classifier import trainer
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from utils.classifier import trainer
 import argparse
 import torch
-from classifier_model import load_model
+from models.classifier_model import load_model
 
 
 def main(model, device, args):
@@ -14,7 +15,7 @@ def main(model, device, args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Train Classifier')
-    parser.add_argument('--model_name', type = str, default="vit_base_patch14_dinov2")
+    parser.add_argument('--model_name', type = str, default="efficientnet_b0")
     parser.add_argument('--num_classes', type = int, default=2)
     parser.add_argument('--train_dataframe_path', type = str, default="/workspace/whole_slide_image_LLM/data/image/train.csv")
     parser.add_argument('--valid_dataframe_path', type = str, default="/workspace/whole_slide_image_LLM/data/image/valid.csv")

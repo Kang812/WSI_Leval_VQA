@@ -18,3 +18,14 @@ def remove_background(image):
     masked_image[mask == 0] = 255.
 
     return masked_image
+
+def background_delete(image):
+    for w_pos in reversed(range(image.shape[1])):
+        if (image[:, w_pos] == [255, 255, 255]).all():
+            image = np.delete(image, w_pos, 1)
+    
+    for h_pos in reversed(range(image.shape[0])):
+        if (image[h_pos, :] == [255, 255, 255]).all():
+            image = np.delete(image, h_pos, 0)
+
+    return image

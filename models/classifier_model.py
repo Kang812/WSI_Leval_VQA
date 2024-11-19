@@ -1,4 +1,5 @@
 import timm
+import torch
 import torch.nn as nn
 
 class network(nn.Module):
@@ -15,4 +16,10 @@ class network(nn.Module):
 
 def load_model(model_name, pretrained, num_classes):
     load_model = network(model_name, pretrained, num_classes)
+    return load_model
+
+def model_ckpt_load(model_name, pretrained, ckpt_path, num_classes):
+    load_model = network(model_name, pretrained, num_classes)
+    load_model.load_state_dict(torch.load(ckpt_path))
+    load_model.eval()
     return load_model

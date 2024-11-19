@@ -2,6 +2,7 @@ import pandas as pd
 from PIL import Image
 import cv2
 import torch
+import torch.nn as nn
 import albumentations as A
 from albumentations.pytorch import ToTensorV2
 from torch.utils.data import Dataset, DataLoader
@@ -140,15 +141,15 @@ def trainer(model, train_dataframe_path, valid_dataframe_path,
             output_path, device):
     
     train_transforms = A.Compose([
-        A.LongestMaxSize(518, interpolation=cv2.INTER_NEAREST),
-        A.PadIfNeeded(min_height=518, min_width=518),
-        A.Normalize(),
+        A.LongestMaxSize(512, interpolation=cv2.INTER_NEAREST),
+        A.PadIfNeeded(min_height=512, min_width=512),
+        A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, always_apply=False, p=1.0),
         ToTensorV2()])
     
     val_transforms= A.Compose([
-        A.LongestMaxSize(518, interpolation=cv2.INTER_NEAREST),
-        A.PadIfNeeded(min_height=518, min_width=518),
-        A.Normalize(),
+        A.LongestMaxSize(512, interpolation=cv2.INTER_NEAREST),
+        A.PadIfNeeded(min_height=512, min_width=512),
+        A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, always_apply=False, p=1.0),
         ToTensorV2()])
     
     label_seq = dict()
@@ -179,3 +180,26 @@ def trainer(model, train_dataframe_path, valid_dataframe_path,
     scheduler = lr_scheduler.StepLR(optimizer, step_size=7, gamma=0.1)
     
     train_classifer(model, data_loaders, dataset_sizes, epochs, criterion, optimizer, scheduler, device, output_path)
+
+def infer(model, image_path, device):
+    
+    val_transforms= A.Compose([
+        A.LongestMaxSize(512, interpolation=cv2.INTER_NEAREST),
+        A.PadIfNeeded(min_height=512, min_width=512),
+        A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, always_apply=False, p=1.0),
+        ToTensorV2()])
+    model.to(device)
+    model.eval()
+
+    img = cv2.imread(image_path)
+    img = val_transforms(image = img)['image']
+    img = img.unsqueeze(0)
+
+    with torch.no_grad():
+        out = model(img.to(device))
+        label_idx = torch.argmax(out, dim=1)
+        label_idx = label_idx.detach().cpu().numpy().tolist()[0]
+    
+    m = nn.Softmax(dim=1)
+    output = m(out)
+    return label_idx, output

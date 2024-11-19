@@ -17,7 +17,7 @@ def data_split(df_path, data_dir, save_path):
 
 
 if __name__ == '__main__':
-    df_path = '/workspace/whole_slide_image_LLM/data/train.csv'
-    data_dir = '/workspace/whole_slide_image_LLM/data/image/train/'
-    save_path = '/workspace/whole_slide_image_LLM/data/image/'
+    df_path = '/workspace/whole_slide_image_LLM/data/ori_train.csv'
+    data_dir = '/workspace/whole_slide_image_LLM/data/train_imgs/'
+    save_path = '/workspace/whole_slide_image_LLM/data/'
     data_split(df_path, data_dir, save_path)
