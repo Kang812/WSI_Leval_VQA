@@ -3,7 +3,7 @@ import torch
 from models.classifier_model import model_ckpt_load
 from utils.classifier import infer
 
-class tumor_detect_dataset(Dataset):
+class Wsi_DataSet(Dataset):
     def __init__(self, image_path, patch_size, stride, model_name, model_ckpt, transform = None):
         self.image = cv2.imread(image_path)
         self.patch_size = patch_size
@@ -47,6 +47,6 @@ class tumor_detect_dataset(Dataset):
         crop_img = self.image[start_coord[1]:start_coord[1]+300, start_coord[0]:start_coord[0] + 300, :]
         predict, prob = infer(self.model, crop_img, device=torch.device('cpu'))
         prob = max(prob.detach().cpu().numpy()[0])
-        
+
 
         return crop_img
