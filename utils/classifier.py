@@ -129,6 +129,8 @@ def train_classifer(model, dataloaders, dataset_sizes, epochs, criterion, optimi
             if phase == 'val' and epoch_f1score > best_score:
                 best_score = epoch_f1score
                 best_model_wts = copy.deepcopy(model.state_dict())
+                output_path2 = "/".join(output_path.split("/")[:-1]) + "/" + f"{i + 1}_f1score_{best_score}.pt"
+                torch.save(model.state_dict(), output_path2)
     
     print(f'\nBest val f1 score: {best_score:4f}')
     
@@ -141,14 +143,14 @@ def trainer(model, train_dataframe_path, valid_dataframe_path,
             output_path, device):
     
     train_transforms = A.Compose([
-        A.LongestMaxSize(512, interpolation=cv2.INTER_NEAREST),
-        A.PadIfNeeded(min_height=512, min_width=512),
+        #A.LongestMaxSize(512, interpolation=cv2.INTER_NEAREST),
+        A.PadIfNeeded(min_height=300, min_width=300),
         A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, always_apply=False, p=1.0),
         ToTensorV2()])
     
     val_transforms= A.Compose([
-        A.LongestMaxSize(512, interpolation=cv2.INTER_NEAREST),
-        A.PadIfNeeded(min_height=512, min_width=512),
+        #A.LongestMaxSize(512, interpolation=cv2.INTER_NEAREST),
+        A.PadIfNeeded(min_height=300, min_width=300),
         A.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225), max_pixel_value=255.0, always_apply=False, p=1.0),
         ToTensorV2()])
     
@@ -191,10 +193,15 @@ def infer(model, image_path, device):
     model.to(device)
     model.eval()
 
-    img = cv2.imread(image_path)
-    img = val_transforms(image = img)['image']
-    img = img.unsqueeze(0)
-
+    if type(image_path) == str:
+        img = cv2.imread(image_path)
+        img = val_transforms(image = img)['image']
+        img = img.unsqueeze(0)
+    else:
+        img = image_path
+        img = val_transforms(image = img)['image']
+        img = img.unsqueeze(0)
+    
     with torch.no_grad():
         out = model(img.to(device))
         label_idx = torch.argmax(out, dim=1)
