@@ -45,11 +45,7 @@ def mil_dataset_gen(model, image_path, patch_size, stride, tile_n, device, white
                 start_h = end_h - patch_size
             
             crop_img = img[start_h:end_h, start_w:end_w, :]
-            white_pixel_ratio = calculate_white_ratio(crop_img)
             
-            #if white_pixel_ratio > white_threshold:
-            #    continue
-
             predict, prob = infer(model, crop_img, device=device)
             prob = max(prob.detach().cpu().numpy()[0])
             
