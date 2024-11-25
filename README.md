@@ -12,17 +12,21 @@ sudo apt-get install -y libvips-dev
 pip install -r requirement.txt
 pip install "unsloth[cu121-torch240] @ git+https://github.com/unslothai/unsloth.git"
 ```
-## Image Preprocessing for Weakly Supervised Learning
-- To create a bag by obtaining patches only from tumor regions, a rule-based approach is applied to select tissues located within mask regions among multiple overlapping tissues, followed by cropping.
-- Please refer to the image_preprocessing.py file and ./utils/wsi_core for the related code.
+```
+pip install git+https://github.com/lucasb-eyer/pydensecrf.git
+```
 
-![image1](./img/image_preprocessing.png)
-
-- Subsequently, patchs were generated to train the classification model. The reference code can be found at ./utils/wsi_core/get_patchs.py.
-
-## Weakly Supervised Learning
-- Learning a classification model for weakly supervised learning
-- The reason for choosing weakly supervised learning is that there is not enough data with masks available. Instead of using a segmentation approach, this method was chosen to detect tumor regions through weakly supervised learning.
+## classification model train
+- I trained a weakly supervised learning model, but due to the poor resolution, it was challenging to detect tumor regions. Therefore, I used the trained classification model to construct bags.
+- The following shell script is code for training a classification model.
+- First, to train a classification model, patches were obtained using training data with mask images. These patches were then used for training. The sequence of steps to train the image classification model is as follows:
+  - 1. ./utils/wsi_core/crop.py: This script is used to remove duplicate tissues and select only tissues within the mask area
+      - To create a bag by obtaining patches only from tumor regions, a rule-based approach is applied to select tissues located within mask regions among multiple overlapping tissues, followed by cropping.
+      - Please refer to the image_preprocessing.py file and ./utils/wsi_core for the related code.
+        ![image1](./img/image_preprocessing.png)
+  - 2. ./utils/wsi_core/get_patchs.py: This script extracts patches from tissue images after removing duplicates.
+  - 3. Afterward, create a DataFrame with only two columns: image_path and label.
+  - 4. Split the DataFrame into train and valid sets, then proceed with training.
 
 ```
 ./classifier_train.sh
@@ -69,7 +73,7 @@ python MIL_train.py --device cuda --num_classes 2 --num_epochs 30 --df_path /wor
 
 ## Reference
 - [WSI-VQA: Interpreting Whole Slide Images by Generative Visual Question Answering](https://arxiv.org/abs/2407.05603)
-  -[github](https://github.com/cpystan/WSI-VQA/tree/master?tab=readme-ov-file)
+  - [github](https://github.com/cpystan/WSI-VQA/tree/master?tab=readme-ov-file)
 - [MamMIL: Multiple Instance Learning for Whole Slide Images with State Space Models](https://arxiv.org/pdf/2403.05160)
 - [TransMIL: Transformer based Correlated Multiple Instance Learning for Whole Slide Image Classification](https://arxiv.org/abs/2106.00908)
 - [Generalizable Whole Slide Image Classification with Fine-Grained Visual-Semantic Interaction](https://openaccess.thecvf.com/content/CVPR2024/papers/Li_Generalizable_Whole_Slide_Image_Classification_with_Fine-Grained_Visual-Semantic_Interaction_CVPR_2024_paper.pdf)
