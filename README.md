@@ -20,13 +20,13 @@ pip install git+https://github.com/lucasb-eyer/pydensecrf.git
 - I trained a weakly supervised learning model, but due to the poor resolution, it was challenging to detect tumor regions. Therefore, I used the trained classification model to construct bags.
 - The following shell script is code for training a classification model.
 - First, to train a classification model, patches were obtained using training data with mask images. These patches were then used for training. The sequence of steps to train the image classification model is as follows:
-  1../utils/wsi_core/crop.py: This script is used to remove duplicate tissues and select only tissues within the mask area
+  - ./utils/wsi_core/crop.py: This script is used to remove duplicate tissues and select only tissues within the mask area
       - To create a bag by obtaining patches only from tumor regions, a rule-based approach is applied to select tissues located within mask regions among multiple overlapping tissues, followed by cropping.
       - Please refer to the image_preprocessing.py file and ./utils/wsi_core for the related code.
         ![image1](./img/image_preprocessing.png)
-  2../utils/wsi_core/get_patchs.py: This script extracts patches from tissue images after removing duplicates.
-  3.Afterward, create a DataFrame with only two columns: image_path and label.
-  4.Split the DataFrame into train and valid sets, then proceed with training.
+  - ./utils/wsi_core/get_patchs.py: This script extracts patches from tissue images after removing duplicates.
+  - Afterward, create a DataFrame with only two columns: image_path and label.
+  - Split the DataFrame into train and valid sets, then proceed with training.
 
 ```
 ./classifier_train.sh
